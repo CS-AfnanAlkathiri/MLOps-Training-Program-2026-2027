@@ -1,0 +1,9 @@
+{
+    "model": "Logistic Regression",
+    "threshold": 0.7,
+    "validation_f1": 0.22356164383561644,
+    "test_precision_late": 0.06901217861975643,
+    "test_recall_late": 0.2467741935483871,
+    "test_f1_late": 0.10786041593232287,
+    "test_accuracy": 0.8251105583195135
+}

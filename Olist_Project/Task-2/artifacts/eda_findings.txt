@@ -1,0 +1,14 @@
+
+MLOps Training 2026/2027 — Task 2
+Notebook 4: EDA Findings
+
+- The training target is imbalanced: 7.83% of orders are late.
+- Most numerical features are strongly right-skewed.
+- Price, freight, and payment values tend to be higher for late orders.
+- Customer and seller geography are related to late delivery.
+- Orders where customer and seller are in different states have a higher late-delivery rate.
+- Longer customer-seller distance is associated with higher late-delivery rates.
+- Late-delivery rates vary noticeably by purchase month.
+- Weekday and holiday effects are smaller.
+- Actual delivery time differs strongly between late and on-time orders, but it must not be used as a prediction feature because it would cause data leakage.
+- Estimated delivery window is similar for both classes and may be less informative on its own.
