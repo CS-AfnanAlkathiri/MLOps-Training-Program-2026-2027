@@ -74,12 +74,18 @@ More projects and tasks will be added to this repository as the training progres
 ```text
 MLOPS/
 ├── README.md
-├── Olist_Project/
-│   └── Task-1/
+├── Task-1/
 │       ├── dataset/
+│       ├── MLOps_Task1.pdf
 │       └── Task1_Olist_Database.ipynb
 ├── Task-2/
-│   └── ...
+│       ├── artifacts/
+│       ├── Notebook_1_Read_Join_Tabels.ipynb
+│       ├── Notebook_2_Create_Labels.ipynb
+│       ├── Notebook_3_Train_Validation_Test_Split.ipynb
+│       ├── Notebook_4_EDA.ipynb
+│       ├── Notebook_5_Feature_Engineering.ipynb
+│       └── Notebook_6_Train_Tune_Evaluate.ipynb
 ├── Task-3/
 │   └── ...
 └── ...
