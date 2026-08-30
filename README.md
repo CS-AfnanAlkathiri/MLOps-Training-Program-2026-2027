@@ -48,27 +48,6 @@ This problem is relevant to areas such as customer satisfaction and operational 
 
 ---
 
-## Projects and Tasks
-
-### Task 1 — Database Ingestion and Validation
-
-The first task focuses on working with the Olist Brazilian E-Commerce Dataset and loading the data into a relational PostgreSQL database.
-
-The task includes:
-
-- Understanding the dataset and its structure
-- Understanding relationships between database tables
-- Creating a PostgreSQL database
-- Importing the dataset into database tables
-- Connecting Python to PostgreSQL
-- Running SQL queries
-- Validating the stored data
-- Testing relationships between tables using SQL JOINs
-
-More projects and tasks will be added to this repository as the training progresses.
-
----
-
 ## Repository Structure
 
 ```text
