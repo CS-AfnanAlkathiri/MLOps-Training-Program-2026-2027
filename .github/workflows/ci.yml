@@ -42,5 +42,8 @@ jobs:
       - name: Check formatting with Ruff
         run: python -m ruff format --check app src tests
 
+      - name: Prepare sample data for tests
+        run: cp tests/fixtures/sample_order.csv data/sample_order.csv
+
       - name: Run tests
         run: python -m pytest -v
