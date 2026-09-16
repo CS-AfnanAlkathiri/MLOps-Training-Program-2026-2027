@@ -3,7 +3,6 @@ import json
 import joblib
 import mlflow
 import mlflow.sklearn
-
 from src.config import PROJECT_ROOT, load_config
 
 

@@ -1,0 +1,9 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
+    hooks:
+      - id: ruff
+        files: ^Task-3/(app|src|tests)/.*\.py$
+
+      - id: ruff-format
+        files: ^Task-3/(app|src|tests)/.*\.py$

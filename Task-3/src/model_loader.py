@@ -4,7 +4,6 @@ import os
 import joblib
 import mlflow.sklearn
 from mlflow import MlflowClient
-
 from src.config import PROJECT_ROOT, load_config
 
 
