@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Task-3
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/runtime.txt
+          pip install -r requirements/dev.txt
+
+      - name: Prepare model artifacts for tests
+        run: |
+          mkdir -p models
+          cp ../Task-2/artifacts/*.joblib models/
+          cp ../Task-2/artifacts/feature_list.json models/
+          cp ../Task-2/artifacts/final_model_results.json models/
+
+      - name: Check code with Ruff
+        run: python -m ruff check app src tests
+
+      - name: Check formatting with Ruff
+        run: python -m ruff format --check app src tests
+
+      - name: Run tests
+        run: python -m pytest -v

@@ -1,0 +1,18 @@
+project:
+  name: olist-late-delivery
+  version: "1.0.0"
+
+paths:
+  model: models/final_logistic_regression.joblib
+  imputer: models/numeric_imputer.joblib
+  encoder: models/onehot_encoder.joblib
+  scaler: models/robust_scaler.joblib
+  feature_list: models/feature_list.json
+  model_results: models/final_model_results.json
+
+prediction:
+  threshold: 0.70
+
+logging:
+  level: INFO
+  file: logs/predictions.log
