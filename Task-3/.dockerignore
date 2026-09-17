@@ -15,3 +15,8 @@ mlflow.db
 
 notebooks/
 tests/
+
+# Local credentials and DVC configuration
+.env
+.env.*
+.dvc/

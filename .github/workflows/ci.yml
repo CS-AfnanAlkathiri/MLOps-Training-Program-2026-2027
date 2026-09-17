@@ -11,6 +11,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     defaults:
       run:
         working-directory: Task-3
@@ -36,7 +40,7 @@ jobs:
       - name: Check formatting with Ruff
         run: python -m ruff format --check app src tests
 
-      # Download Task 3's own model and data from Google Drive.
+      # Download Task 3's model and data from Google Drive.
       # Do not expose credentials to pull requests from forks.
       - name: Download artifacts with DVC
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
@@ -84,3 +88,32 @@ jobs:
       - name: Run tests
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         run: python -m pytest -v
+
+      # Publish only on main after all preceding steps pass.
+      - name: Prepare Docker image name
+        if: github.event_name == 'push'
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        if: github.event_name == 'push'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish Docker image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Task-3
+          file: ./Task-3/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
