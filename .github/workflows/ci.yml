@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -29,9 +30,16 @@ jobs:
           pip install -r requirements/runtime.txt
           pip install -r requirements/dev.txt
 
-      # Test Google Drive access without changing the existing CI setup yet.
-      - name: Verify DVC remote download
-        if: github.event_name == 'push'
+      - name: Check code with Ruff
+        run: python -m ruff check app src tests
+
+      - name: Check formatting with Ruff
+        run: python -m ruff format --check app src tests
+
+      # Download Task 3's own model and data from Google Drive.
+      # Do not expose credentials to pull requests from forks.
+      - name: Download artifacts with DVC
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         env:
           GDRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}
         run: |
@@ -71,24 +79,8 @@ jobs:
 
           "$RUNNER_TEMP/dvc-ci-venv/bin/dvc" pull
 
-          echo "DVC remote download completed successfully."
-
-      # Temporary fallback: remove after the DVC download is verified.
-      - name: Prepare model artifacts for tests
-        run: |
-          mkdir -p models
-          cp ../Task-2/artifacts/*.joblib models/
-          cp ../Task-2/artifacts/feature_list.json models/
-          cp ../Task-2/artifacts/final_model_results.json models/
-
-      - name: Check code with Ruff
-        run: python -m ruff check app src tests
-
-      - name: Check formatting with Ruff
-        run: python -m ruff format --check app src tests
-
-      - name: Prepare sample data for tests
-        run: cp tests/fixtures/sample_order.csv data/sample_order.csv
+          echo "DVC artifacts downloaded successfully."
 
       - name: Run tests
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         run: python -m pytest -v
