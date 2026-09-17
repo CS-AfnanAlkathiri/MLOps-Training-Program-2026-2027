@@ -1,10 +1,12 @@
 import logging
 import time
+from uuid import uuid4
 
 from src.config import load_config
 from src.gx_validation import validate_with_gx
 from src.logging_config import setup_logging
 from src.model_loader import load_artifacts
+from src.prediction_log import save_prediction_event
 from src.preprocessing import preprocess_for_model
 from src.validation import validate_input
 
@@ -46,6 +48,7 @@ def predict_order(data):
                 "prediction": "late" if pred == 1 else "on_time",
                 "probability": float(probability),
                 "model_version": model_version,
+                "prediction_id": str(uuid4()),
             }
         )
 
@@ -58,5 +61,8 @@ def predict_order(data):
         latency_ms,
         model_version,
     )
+
+    for result in results:
+        save_prediction_event(result)
 
     return results

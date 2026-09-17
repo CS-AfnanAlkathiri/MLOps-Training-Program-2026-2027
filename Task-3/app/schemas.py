@@ -28,3 +28,4 @@ class PredictionResponse(BaseModel):
     prediction: str
     probability: float
     model_version: int
+    prediction_id: str | None = None
