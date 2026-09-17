@@ -1,10 +1,11 @@
 import pandas as pd
+from fastapi import FastAPI
+
 from app.schemas import (
     BatchPredictionRequest,
     OrderInput,
     PredictionResponse,
 )
-from fastapi import FastAPI
 from src.model_loader import load_artifacts
 from src.prediction import predict_order
 

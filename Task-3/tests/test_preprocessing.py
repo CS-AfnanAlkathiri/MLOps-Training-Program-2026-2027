@@ -1,4 +1,5 @@
 import pandas as pd
+
 from src.model_loader import load_artifacts
 from src.preprocessing import preprocess_for_model
 

@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+
 from src.validation import validate_input
 
 
