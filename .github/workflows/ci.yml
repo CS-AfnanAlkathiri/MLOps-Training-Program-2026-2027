@@ -29,6 +29,51 @@ jobs:
           pip install -r requirements/runtime.txt
           pip install -r requirements/dev.txt
 
+      # Test Google Drive access without changing the existing CI setup yet.
+      - name: Verify DVC remote download
+        if: github.event_name == 'push'
+        env:
+          GDRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+
+          python -m venv "$RUNNER_TEMP/dvc-ci-venv"
+
+          "$RUNNER_TEMP/dvc-ci-venv/bin/python" -m pip install \
+            "dvc[gdrive]==3.67.1" \
+            "pyOpenSSL==24.2.1" \
+            "cryptography==43.0.3" \
+            "asyncssh<2.24"
+
+          "$RUNNER_TEMP/dvc-ci-venv/bin/python" -m pip check
+
+          credentials_file="$RUNNER_TEMP/dvc-service-account.json"
+
+          cleanup() {
+            rm -f "$credentials_file"
+          }
+          trap cleanup EXIT
+
+          if [ -z "$GDRIVE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "Google Drive service account secret is missing."
+            exit 1
+          fi
+
+          printf '%s' "$GDRIVE_SERVICE_ACCOUNT_JSON" > "$credentials_file"
+          chmod 600 "$credentials_file"
+
+          "$RUNNER_TEMP/dvc-ci-venv/bin/dvc" remote modify \
+            --local storage gdrive_use_service_account true
+
+          "$RUNNER_TEMP/dvc-ci-venv/bin/dvc" remote modify \
+            --local storage gdrive_service_account_json_file_path \
+            "$credentials_file"
+
+          "$RUNNER_TEMP/dvc-ci-venv/bin/dvc" pull
+
+          echo "DVC remote download completed successfully."
+
+      # Temporary fallback: remove after the DVC download is verified.
       - name: Prepare model artifacts for tests
         run: |
           mkdir -p models
