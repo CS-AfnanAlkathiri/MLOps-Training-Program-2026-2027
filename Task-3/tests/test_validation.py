@@ -52,3 +52,13 @@ def test_missing_required_column_raises_error():
 
     with pytest.raises(ValueError, match="Missing required columns"):
         validate_input(data)
+
+
+def test_negative_distance_fails_gx():
+    from src.gx_validation import validate_with_gx
+
+    data = pd.read_csv("data/sample_order.csv")
+    data.loc[0, "distance_km"] = -10.0
+
+    with pytest.raises(ValueError, match="Great Expectations validation failed"):
+        validate_with_gx(data)
